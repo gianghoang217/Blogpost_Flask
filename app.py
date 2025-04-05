@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from models import db
 from auth import auth_bp
+from posts import posts_bp
 
 
 app = Flask(__name__, static_folder="static")
@@ -23,6 +24,7 @@ migrate = Migrate(app, db)
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
+app.register_blueprint(posts_bp)
 
 
 if __name__ == '__main__':
