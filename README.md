@@ -16,6 +16,11 @@ Make sure you have the following installed:
 ##  Install Required Packages
 - pip install -r requirements.txt
 
+## Run db Migrate
+- flask db init
+- flask db migrate -m "Initial migration"
+- flask db upgrade
+
 ## Run the Server
 - python app.py
 

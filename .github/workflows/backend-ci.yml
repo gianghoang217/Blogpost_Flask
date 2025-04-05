@@ -1,0 +1,60 @@
+name: Flask Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: bloguser
+          POSTGRES_PASSWORD: Blogpost12345!
+          POSTGRES_DB: blogpost_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run Migrations
+        env:
+          SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://bloguser:Blogpost12345!@localhost/blogpost_db
+        run: |
+          source venv/bin/activate
+          flask db upgrade
+
+      - name: Run Tests
+        env:
+          SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://bloguser:Blogpost12345!@localhost/blogpost_db
+        run: |
+          source venv/bin/activate
+          pytest
+
+  
