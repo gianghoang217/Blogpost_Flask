@@ -56,3 +56,21 @@ def delete_post(post_id):
     db.session.commit()
     return jsonify({"message": "Post deleted successfully"}), 200
 
+
+# Like a post
+@posts_bp.route('/<int:post_id>/like', methods=['POST'])
+@jwt_required()
+def like_post(post_id):
+    user_id = get_jwt_identity()
+    post = Post.query.get_or_404(post_id)
+
+    # Check if the user has already liked the post
+    existing_like = Like.query.filter_by(user_id=user_id, post_id=post_id).first()
+    if existing_like:
+        return jsonify({"error": "You have already liked this post"}), 400
+
+    # Add a new like
+    like = Like(user_id=user_id, post_id=post_id)
+    db.session.add(like)
+    db.session.commit()
+    return jsonify({"message": "Post liked successfully"}), 201
