@@ -15,6 +15,14 @@ def create_post():
     db.session.commit()
     return jsonify({"message": "Post created successfully", "post": new_post.to_dict()}), 201
 
+# View a single post
+@posts_bp.route('/<int:post_id>', methods=['GET'])
+@jwt_required()
+def get_single_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return jsonify(post.to_dict()), 200
+
+
 # View all posts
 @posts_bp.route('/', methods=['GET'])
 @jwt_required()
