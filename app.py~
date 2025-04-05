@@ -9,6 +9,8 @@ from auth import auth_bp
 
 app = Flask(__name__, static_folder="static")
 
+
+
 CORS(app)
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgresql+psycopg2://bloguser:Blogpost12345!@localhost/blogpost_db')
