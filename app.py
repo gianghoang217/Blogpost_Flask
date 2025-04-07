@@ -12,7 +12,7 @@ app = Flask(__name__, static_folder="static")
 
 CORS(app, supports_credentials=True)
 # Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgres://neondb_owner:npg_7vSaLBhN9GjF@ep-fragrant-field-a7r1dpi0-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgresql://neondb_owner:npg_7vSaLBhN9GjF@ep-fragrant-field-a7r1dpi0.ap-southeast-2.aws.neon.tech/neondb?sslmode=require')
 # os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgresql+psycopg2://bloguser:Blogpost12345!@localhost/blogpost_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
