@@ -13,7 +13,8 @@ auth_bp = Blueprint('auth', __name__)
 def register():
     data = request.get_json()
     is_admin = data.get('is_admin', False)
-
+    # Hash the password before storing
+    # mason
     hashed_password = generate_password_hash(data['password'], method='pbkdf2:sha256')
 
     # Create a new user
