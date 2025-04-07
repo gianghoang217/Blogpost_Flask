@@ -41,12 +41,12 @@ def login():
 
     if user and check_password_hash(user.password, data['password']):
         additional_claims = {
-            "is_admin": user.is_admin  # Assuming your User model has is_admin field
+            "is_admin": user.is_admin
         }
         # Generate both access and refresh tokens
         access_token = create_access_token(identity=user.id,
                                            expires_delta=timedelta(hours=1),
-                                           additional_claims=additional_claims)  # 1-hour access token
+                                           additional_claims=additional_claims)
         refresh_token = create_refresh_token(identity=user.id, expires_delta=timedelta(days=7))  # 7-day refresh token
 
         return jsonify({
