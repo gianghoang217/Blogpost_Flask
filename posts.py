@@ -62,6 +62,9 @@ def delete_post(post_id):
 @jwt_required()
 def like_post(post_id):
     user_id = get_jwt_identity()
+    post = Post.query.get_or_404(post_id)
+
+
     # Check if the user has already liked the post
     existing_like = Like.query.filter_by(user_id=user_id, post_id=post_id).first()
     if existing_like:
