@@ -10,7 +10,7 @@ from posts import posts_bp
 
 app = Flask(__name__, static_folder="static")
 
-CORS(app)
+CORS(app, supports_credentials=True)
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgresql+psycopg2://bloguser:Blogpost12345!@localhost/blogpost_db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

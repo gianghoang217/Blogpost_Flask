@@ -4,7 +4,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, create_refresh_token
 from models import db, User
 from datetime import timedelta
+import logging
 
+# Set up logging (put this at the top of your main app file)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -37,12 +41,12 @@ def login():
 
     if user and check_password_hash(user.password, data['password']):
         additional_claims = {
-            "is_admin": user.is_admin  # Assuming your User model has is_admin field
+            "is_admin": user.is_admin
         }
         # Generate both access and refresh tokens
         access_token = create_access_token(identity=user.id,
                                            expires_delta=timedelta(hours=1),
-                                           additional_claims=additional_claims)  # 1-hour access token
+                                           additional_claims=additional_claims)
         refresh_token = create_refresh_token(identity=user.id, expires_delta=timedelta(days=7))  # 7-day refresh token
 
         return jsonify({
@@ -59,3 +63,9 @@ def login():
 
     return jsonify({"error": "Invalid credentials"}), 401
 
+@auth_bp.route('/user', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    return jsonify({'id': user.id, 'username': user.username, 'email': user.email})
