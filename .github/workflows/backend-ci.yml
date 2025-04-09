@@ -46,7 +46,7 @@ jobs:
 
       - name: Add Project Root to Python Path
         run: |
-          echo "::set-env name=PYTHONPATH::$(pwd)"
+          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
       - name: Run Migrations
         env:
