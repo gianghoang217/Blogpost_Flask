@@ -88,3 +88,14 @@ def test_delete_post(test_client):
     logger.info(f"Delete post response: {response.status_code}, {response.data}")
     assert response.status_code == 200
     assert json.loads(response.data)['message'] == 'Post deleted successfully'
+    
+    
+    def test_like_post(test_client):
+        headers = {
+            'Authorization': f'Bearer {test_client.access_token}'
+        }
+        logger.info(f"Liking post with ID: {test_client.post_id}")
+        response = test_client.post(f'/posts/{test_client.post_id}/like', headers=headers)
+        logger.info(f"Like post response: {response.status_code}, {response.data}")
+        assert response.status_code == 201
+        assert json.loads(response.data)['message'] == 'Post liked successfully'
