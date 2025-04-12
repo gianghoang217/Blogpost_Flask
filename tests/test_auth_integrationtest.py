@@ -11,15 +11,22 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture
 def test_client():
+    original_uri = app.config['SQLALCHEMY_DATABASE_URI']
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    if 'neondb' in app.config['SQLALCHEMY_DATABASE_URI']:
+        raise ValueError("TEST TRYING TO USE PRODUCTION DATABASE!")
 
     with app.test_client() as client:
         with app.app_context():
-            db.create_all()
-            yield client
-            db.session.rollback()  # Rollback after each test
             db.drop_all()
+            db.create_all()
+            logger.info("Test database initialized with clean tables")
+            yield client
+            db.session.rollback()
+            db.drop_all()
+    app.config['SQLALCHEMY_DATABASE_URI'] = original_uri
+    logger.info("Original database URI restored")
 
 def test_register_user(test_client):
     try:
